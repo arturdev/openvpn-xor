@@ -55,6 +55,7 @@ compile_and_install_openvpn() {
     ./configure
     make
     make install
+    ln -sf /usr/local/sbin/openvpn /usr/sbin/openvpn
 }
 
 # Function to enable IP forwarding
@@ -67,7 +68,7 @@ net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
 
 # Function to create and install OpenVPN service file
 create_service_file() {
-    local service_file="/lib/systemd/system/openvpn\@.service"
+    local service_file="/lib/systemd/system/openvpn@.service"
     
     echo "Removing existing OpenVPN service file (if any)..."
     rm -f "$service_file"
@@ -106,10 +107,8 @@ EOL
 
     echo "New OpenVPN service file has been created."
 
-    echo "Reloading systemd daemon and enabling OpenVPN service..."
+    echo "Reloading systemd daemon"
     systemctl daemon-reload
-    systemctl enable openvpn@.service
-    echo "OpenVPN service has been enabled."
 }
 
 # Main function
