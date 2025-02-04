@@ -103,12 +103,12 @@ main() {
     prepare_openvpn_source
     download_and_apply_patches
     compile_and_install_openvpn
-    enable_ip_forwarding
-    create_service_file
+    #enable_ip_forwarding
+    #create_service_file
     echo "OpenVPN with XOR patch has been installed successfully!"
-    echo "The OpenVPN service has been created and enabled."
-    echo "You can start it with: systemctl start openvpn@server"
-    echo "Make sure you have created the server configuration file at /etc/openvpn/server.conf before starting the service."
+    #echo "The OpenVPN service has been created and enabled."
+    #echo "You can start it with: systemctl start openvpn@server"
+    #echo "Make sure you have created the server configuration file at /etc/openvpn/server.conf before starting the service."
 }
 
 # Run the main function
