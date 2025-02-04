@@ -74,16 +74,33 @@ create_service_file() {
     
     echo "Creating new OpenVPN service file..."
     cat > "$service_file" << EOL
-[Unit] 
-Description=OpenVPN Robust And Highly Flexible Tunneling Application On %I
-After=syslog.target network.target
- 
-[Service] 
-Type=forking 
-PrivateTmp=true 
-ExecStart=/usr/local/sbin/openvpn --daemon --cd /etc/openvpn/ --config /etc/openvpn/server.conf 
+[Unit]
+Description=OpenVPN connection to %i
+PartOf=openvpn.service
+Before=systemd-user-sessions.service
+After=network-online.target
+Wants=network-online.target
+Documentation=man:openvpn(8)
+Documentation=https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage
+Documentation=https://community.openvpn.net/openvpn/wiki/HOWTO
 
-[Install] 
+[Service]
+Type=notify
+PrivateTmp=true
+WorkingDirectory=/etc/openvpn
+ExecStart=/usr/local/sbin/openvpn --daemon ovpn-%i --status /run/openvpn/%i.status 10 --cd /etc/openvpn --config /etc/openvpn/%i.conf --writepid /run/openvpn/%i.pid
+PIDFile=/run/openvpn/%i.pid
+KillMode=process
+CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE CAP_AUDIT_WRITE
+LimitNPROC=100
+DeviceAllow=/dev/null rw
+DeviceAllow=/dev/net/tun rw
+ProtectSystem=true
+ProtectHome=true
+RestartSec=5s
+Restart=on-failure
+
+[Install]
 WantedBy=multi-user.target
 EOL
 
@@ -104,9 +121,9 @@ main() {
     download_and_apply_patches
     compile_and_install_openvpn
     #enable_ip_forwarding
-    #create_service_file
+    create_service_file
     echo "OpenVPN with XOR patch has been installed successfully!"
-    #echo "The OpenVPN service has been created and enabled."
+    echo "The OpenVPN service has been created and enabled."
     #echo "You can start it with: systemctl start openvpn@server"
     #echo "Make sure you have created the server configuration file at /etc/openvpn/server.conf before starting the service."
 }
