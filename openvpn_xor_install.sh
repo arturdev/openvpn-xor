@@ -86,7 +86,7 @@ Documentation=https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage
 Documentation=https://community.openvpn.net/openvpn/wiki/HOWTO
 
 [Service]
-Type=notify
+Type=simple
 PrivateTmp=true
 WorkingDirectory=/etc/openvpn
 ExecStartPre=/bin/mkdir -p /run/openvpn
