@@ -67,7 +67,7 @@ net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
 
 # Function to create and install OpenVPN service file
 create_service_file() {
-    local service_file="/etc/systemd/system/openvpn@server.service"
+    local service_file="/etc/systemd/system/openvpn@.service"
     
     echo "Removing existing OpenVPN service file (if any)..."
     rm -f "$service_file"
@@ -108,7 +108,7 @@ EOL
 
     echo "Reloading systemd daemon and enabling OpenVPN service..."
     systemctl daemon-reload
-    systemctl enable openvpn@server.service
+    systemctl enable openvpn@.service
     echo "OpenVPN service has been enabled."
 }
 
