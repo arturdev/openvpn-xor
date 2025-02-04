@@ -67,7 +67,7 @@ net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
 
 # Function to create and install OpenVPN service file
 create_service_file() {
-    local service_file="/etc/systemd/system/openvpn@.service"
+    local service_file="/lib/systemd/system/openvpn\@.service"
     
     echo "Removing existing OpenVPN service file (if any)..."
     rm -f "$service_file"
@@ -88,7 +88,7 @@ Documentation=https://community.openvpn.net/openvpn/wiki/HOWTO
 Type=notify
 PrivateTmp=true
 WorkingDirectory=/etc/openvpn
-ExecStart=/usr/local/sbin/openvpn --daemon ovpn-%i --status /run/openvpn/%i.status 10 --cd /etc/openvpn --config /etc/openvpn/%i.conf --writepid /run/openvpn/%i.pid
+ExecStart=/usr/sbin/openvpn --daemon ovpn-%i --status /run/openvpn/%i.status 10 --cd /etc/openvpn --config /etc/openvpn/%i.conf --writepid /run/openvpn/%i.pid
 PIDFile=/run/openvpn/%i.pid
 KillMode=process
 CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE CAP_AUDIT_WRITE
